@@ -58,12 +58,16 @@ var (
 	resetFlag   = flag.Bool("reset", false, "discard existing index")
 	verboseFlag = flag.Bool("verbose", false, "print extra information")
 	cpuProfile  = flag.String("cpuprofile", "", "write cpu profile to this file")
+	customIndex  = flag.String("customindex", "", "custom index to use")
 )
 
 func main() {
 	flag.Usage = usage
 	flag.Parse()
 	args := flag.Args()
+	if *customIndex != "" {
+		index.AddIndexFile(*customIndex)
+	}
 
 	if *listFlag {
 		ix := index.Open(index.File())
