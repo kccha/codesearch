@@ -11,11 +11,11 @@ import (
 	"os"
 	"runtime/pprof"
 
-	"github.com/google/codesearch/index"
-	"github.com/google/codesearch/regexp"
+	"github.com/kccha/codesearch/index"
+	"github.com/kccha/codesearch/regexp"
 )
 
-var usageMessage = `usage: csearch [-c] [-f fileregexp] [-h] [-i] [-l] [-n] regexp
+var usageMessage = `usage: csearch [-customindex="..."] [-c] [-f fileregexp] [-h] [-i] [-l] [-n] regexp
 
 Csearch behaves like grep over all indexed files, searching for regexp,
 an RE2 (nearly PCRE) regular expression.
@@ -51,6 +51,7 @@ var (
 	verboseFlag = flag.Bool("verbose", false, "print extra information")
 	bruteFlag   = flag.Bool("brute", false, "brute force - search all files in index")
 	cpuProfile  = flag.String("cpuprofile", "", "write cpu profile to this file")
+	customIndex  = flag.String("customindex", "", "custom index to use")
 
 	matches bool
 )
@@ -68,6 +69,11 @@ func Main() {
 
 	if len(args) != 1 {
 		usage()
+	}
+
+	if *customIndex != "" {
+		log.Printf("Using custom index: %s", *customIndex)
+		index.AddIndexFile(*customIndex)
 	}
 
 	if *cpuProfile != "" {

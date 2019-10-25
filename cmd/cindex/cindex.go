@@ -13,10 +13,10 @@ import (
 	"runtime/pprof"
 	"sort"
 
-	"github.com/google/codesearch/index"
+	"github.com/kccha/codesearch/index"
 )
 
-var usageMessage = `usage: cindex [-list] [-reset] [path...]
+var usageMessage = `usage: cindex [-list] [-reset] [path...] [-customindex="..."]
 
 Cindex prepares the trigram index for use by csearch.  The index is the
 file named by $CSEARCHINDEX, or else $HOME/.csearchindex.
@@ -66,6 +66,7 @@ func main() {
 	flag.Parse()
 	args := flag.Args()
 	if *customIndex != "" {
+		log.Printf("Using custom index: %s", *customIndex)
 		index.AddIndexFile(*customIndex)
 	}
 
